@@ -1,0 +1,13 @@
+<!-- <button type="button" [classList]="color" [disabled]="disabled"
+    class="flex justify-center items-center text-center uppercase hover:shadow-md focus:shadow-lg font-medium rounded-full text-sm px-6 py-[10px] h-10 w-full border"
+    [ngClass]="{'gap-2': icon,'bg-opacity-70 border-opacity-50 text-opacity-50 cursor-not-allowed': disabled, 'pl-[16px] pr-[24px]': label === '+ ADD SLOT' }">
+    <i *ngIf="icon" [class]="icon" class="text-2xl"></i>
+    {{ label }}
+    <ng-content></ng-content>
+</button> -->
+
+<button type="button" [classList]="color" [disabled]="disabled" class="flex justify-center items-center text-center capitalize hover:shadow-md focus:shadow-lg font-medium rounded-full text-sm px-4 py-[10px] h-10 w-full border" [ngClass]="{'gap-2': icon,'pl-[20px] pr-[24px]': label === '+ ADD SLOT', 'bg-[rgba(224,224,224,1)] text-[rgba(163,163,163,1)] border-[rgba(163,163,163,0.5)] border-none cursor-not-allowed hover:shadow-none focus:shadow-none': disabled}">
+    <i *ngIf="icon" [class]="icon" class="text-lg font-bold"></i>
+    {{ label }}
+    <ng-content></ng-content>
+</button>

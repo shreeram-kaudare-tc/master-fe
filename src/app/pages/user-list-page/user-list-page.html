@@ -1,0 +1,57 @@
+<div class="mx-auto mt-10 bg-white shadow-lg rounded-lg p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="text-2xl font-bold text-blue-600">User List </h1>
+        <app-button (click)="form_modal?.open()" color="bg-blue-500 text-white" [label]="'Add User'" icon="bx  bx-plus" type="button"></app-button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-200">
+            <thead class="bg-blue-600 text-white">
+                <tr>
+                    <th class="px-4 py-2 text-left">#</th>  
+                    <th class="px-4 py-2 text-left">Name</th>
+                    <th class="px-4 py-2 text-left">Email</th>
+                    <th class="px-4 py-2 text-left">Role</th>
+                    <th class="px-4 py-2 text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of user_list; let i = index" class="border-b hover:bg-gray-100">
+                    <td class="px-4 py-2">{{ i + 1 }}</td>
+                    <td class="px-4 py-2">{{ item.first_name }} {{ item.last_name }}</td>
+                    <td class="px-4 py-2">{{ item.email }}</td>
+                    <td class="px-4 py-2 font-medium text-blue-600">{{ item.role_id }}</td>
+                    <td class="px-4 py-2 flex justify-center gap-2">
+                        <app-button (click)="form_modal?.open(); open_edit_model(item)" label="Edit" color="bg-yellow-500 text-white"></app-button>
+                        <app-button (click)="delete?.open()" label="Delete" color="bg-red-500 text-white"></app-button>
+                    </td>
+                </tr>
+                <tr *ngIf="user_list.length === 0">
+                    <td class="flex flex-col items-center justify-center h-[calc(100%-150px)]">
+                        <img src="no_record.png" class="w-64 h-64 object-contain" alt="No Records" />
+                        <p class="text-md text-center mt-2">No records found</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<app-model #form_modal [title]="params.action === 'edit' ? 'Edit User' : 'Add User'" width="md" (close_modal_clicked)="form.reset()">
+    <form [formGroup]="form">
+        <div class="py-2 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4">
+            <app-text-input [is_required]="true" class="w-full" [label]="'First Name'" formControlName="first_name"></app-text-input>
+            <app-text-input [is_required]="true" class="w-full" [label]="'Last Name'" formControlName="last_name"></app-text-input>
+            <app-text-input [is_required]="true" class="w-full" [label]="'Email'" formControlName="email"></app-text-input>
+            <app-text-input [is_required]="true" class="w-full" [label]="'Contact'" formControlName="contact"></app-text-input>
+            <app-text-input [is_required]="true" class="w-full" [label]="'Role'" formControlName="role_id"></app-text-input>
+        </div>
+        <div class="flex justify-end items-center gap-2 mt-2">
+            <app-button color="border-primary text-primary" label="Cancel" type="button" (click)="form_modal?.close();form.reset()"></app-button>
+            <app-button color="bg-blue-500 text-black" [label]="params.action === 'edit' ? 'Update' : 'Add'" type="button" (click)="submit()"></app-button>
+        </div>
+    </form>
+</app-model>
+
+<app-confirmation-popup #delete confirmation_message="Are you sure you want to Delete this User" popup_title="Delete User">
+    <app-button class="relative" (click)="delete_confirm(params.id)" label="Delete" color="bg-[#3F41D1] text-white"></app-button>
+</app-confirmation-popup>

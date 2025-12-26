@@ -1,0 +1,32 @@
+<div class="relative">
+    <input [disabled]="disabled || paramValue == 'true'" (keypress)="validateInput($event)"
+        [attr.maxlength]="type_total_latter > 0 ? type_total_latter : null" [(ngModel)]="value"
+        (ngModelChange)="onChange($event)" [type]="(text_type && mask) ? 'password':type"
+        [ngClass]="{'rounded-full': rounded,'rounded-lg': !rounded,'bg-gray-200':disabled,'bg-white': !disabled}"
+        [id]="label"
+        class="block p-4 w-full text-sm text-gray-900 bg-white border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+        [placeholder]="placeholder" />
+    <label [for]="label" [ngClass]="{'bg-gray-200':disabled,'bg-white': !disabled}"
+        class="pointer-events-none absolute text-sm text-[#666666] text-[rgba(0,0,0,0.7)] duration-300 transform -translate-y-4 scale-75 top-2 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-gray-900 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1 max-w-[98%] truncate ">{{label}}<span *ngIf="is_required"
+            [ngClass]="{'text-gray-900':disabled,'text-red-700': !disabled}" class="col-span-2 text-opacity-60">*</span></label>
+    <button *ngIf="fetch" (click)="fetch_clicked()" class="text-blue-500 text-sm absolute font-medium right-4 top-3">Fetch</button>
+     <button *ngIf="copyable" (click)="copy_clicked()" class="text-gray-600 text-sm absolute right-2 top-[10px] active:bg-gray-200 hover:bg-gray-100 rounded-full p-2" title="Copy">
+    <i class='bx bx-copy text-xl'></i>
+  </button>
+    <button *ngIf="mask" (click)="eye_clicked()" class="text-blue-500 text-sm absolute right-4 top-3">
+        <i class='bx bx-show text-xl'></i></button>
+</div>
+<div *ngIf="control && control.errors && (control.dirty || control.touched)" class="error-messages ml-3 mt-1 text-xs">
+    <p class="text-red-500" *ngIf="control.errors.required">{{ custom_required_error_msg || label + ' is required' }}
+    </p>
+    <p class="text-red-500" *ngIf="control.errors.minlength">{{ custom_min_error_msg || 'Minimum length required is ' +
+        control.errors.minlength.requiredLength + '.' }}</p>
+    <p class="text-red-500" *ngIf="control.errors.maxlength">{{ custom_max_error_msg || 'Maximum length allowed is ' +
+        control.errors.maxlength.requiredLength + '.' }}</p>
+    <p class="text-red-500" *ngIf="control.errors.pattern">{{ custom_pattern_error_msg || 'Please enter a valid ' +
+        label }}</p>
+    <p class="text-red-500" *ngIf="control.errors['email']">Invalid email format</p>
+    <p class="text-red-500"
+        *ngIf="control.errors.invalidFormat || control.errors.sameYear || control.errors.invalidYearRange || control.errors.pastYear">
+        Please enter a valid Academic Year (e.g., 2024-2025)</p>
+</div>

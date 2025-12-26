@@ -1,1 +1,40 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Graphik';
+}
+
+.ant-image-preview-img {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
+.text-primary {
+    color: #3F41D1;
+}
+
+.bg-primary {
+    background-color: #3F41D1;
+}
+
+.border-primary {
+    border: 1px solid #3F41D1;
+}
+
+.text-red {
+    color: #E598AC;
+}
+
+.bg-red {
+    background-color: #E598AC;
+}
