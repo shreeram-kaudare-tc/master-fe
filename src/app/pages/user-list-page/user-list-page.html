@@ -36,7 +36,7 @@
     </div>
 </div>
 
-<app-model #form_modal [title]="params.action === 'edit' ? 'Edit User' : 'Add User'" width="md" (close_modal_clicked)="form.reset()">
+<app-model #form_modal [title]="params.action === 'edit' ? 'Update User' : 'Add User'" width="md" (close_modal_clicked)="form.reset()">
     <form [formGroup]="form">
         <div class="py-2 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4">
             <app-text-input [is_required]="true" class="w-full" [label]="'First Name'" formControlName="first_name"></app-text-input>
