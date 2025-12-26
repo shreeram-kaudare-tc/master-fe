@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class HttpService {
-  private base_url = "";
+  private base_url = "http://localhost:3000";
 
   constructor(private http: HttpClient) { }
 

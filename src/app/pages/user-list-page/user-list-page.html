@@ -19,7 +19,7 @@
                     <td class="px-4 py-2">{{ i + 1 }}</td>
                     <td class="px-4 py-2">{{ item.first_name }} {{ item.last_name }}</td>
                     <td class="px-4 py-2">{{ item.email }}</td>
-                    <td class="px-4 py-2 font-medium text-blue-600">{{ item.role_id }}</td>
+                    <td class="px-4 py-2 font-medium text-blue-600">{{ item.role }}</td>
                     <td class="px-4 py-2 flex justify-center gap-2">
                         <app-button (click)="form_modal?.open(); open_edit_model(item)" label="Edit" color="bg-yellow-500 text-white"></app-button>
                         <app-button (click)="delete?.open()" label="Delete" color="bg-red-500 text-white"></app-button>
@@ -43,7 +43,7 @@
             <app-text-input [is_required]="true" class="w-full" [label]="'Last Name'" formControlName="last_name"></app-text-input>
             <app-text-input [is_required]="true" class="w-full" [label]="'Email'" formControlName="email"></app-text-input>
             <app-text-input [is_required]="true" class="w-full" [label]="'Contact'" formControlName="contact"></app-text-input>
-            <app-text-input [is_required]="true" class="w-full" [label]="'Role'" formControlName="role_id"></app-text-input>
+            <app-text-input [is_required]="true" class="w-full" [label]="'Role'" formControlName="role"></app-text-input>
         </div>
         <div class="flex justify-end items-center gap-2 mt-2">
             <app-button color="border-primary text-primary" label="Cancel" type="button" (click)="form_modal?.close();form.reset()"></app-button>

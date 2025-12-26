@@ -24,7 +24,7 @@ export class UserListPage {
       last_name: 'Patil',
       email: 'rahul@gmail.com',
       contact: '9876543210',
-      role_id: 'Admin'
+      role: 'Admin'
     },
     {
       id: 1,
@@ -32,7 +32,7 @@ export class UserListPage {
       last_name: 'Patil',
       email: 'jay@gmail.com',
       contact: '9877548210',
-      role_id: 'Admin'
+      role: 'Admin'
     },
 
   ];
@@ -43,7 +43,7 @@ export class UserListPage {
 
   constructor(public route: Router, public fb: FormBuilder, public us: UserService, public ar: ActivatedRoute) {
     this.form = this.fb.group({
-      role_id: ['', [Validators.required]],
+      role: ['', [Validators.required]],
       first_name: ['', [Validators.required]],
       last_name: ['', [Validators.required]],
       email: ['', [Validators.required]],
