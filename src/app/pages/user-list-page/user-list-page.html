@@ -43,15 +43,15 @@
                         <td class="px-4 py-2">{{ item.contact }}</td>
                         <td class="px-4 py-2 font-medium text-blue-600 capitalize">{{ item.role }}</td>
                         <td class="px-4 py-2 flex justify-center gap-2">
+                            <app-button (click)="form_modal?.open(); open_view_model(item, i)" label="View" color="bg-yellow-500 text-white"></app-button>
                             <app-button (click)="form_modal?.open(); open_edit_model(item, i)" label="Edit" color="bg-yellow-500 text-white"></app-button>
-                            <app-button (click)="delete?.open();selected_data=item" label="Delete" color="bg-red-500 text-white"></app-button>
+                            <app-button (click)="open_delete_model(item, i)" label="Delete" color="bg-red-500 text-white"></app-button>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div *ngIf="list?.data?.length == 0" class="flex flex-col items-center justify-center h-[calc(100%-150px)]">
-                  <img src="no_record.png" class="w-64 h-64 object-contain" alt="No Records" />
-                <!-- <p class="text-md text-center mt-2">No records found</p> -->
+                <img src="no_record.png" class="w-64 h-64 object-contain" alt="No Records" />
             </div>
         </div>
     </div>
@@ -59,7 +59,7 @@
     <app-pagination [currentPage]="params.page" [totalItems]="list?.count || 0" [itemsPerPage]="params.page_size" (onPageChange)="handlePageChange($event)"></app-pagination>
 </div>
 
-<app-model #form_modal [title]="params.action === 'edit' ? 'Update User' : 'Add User'" width="md" (close_modal_clicked)="form.reset()">
+<app-model #form_modal [title]="params.action === 'edit' ? 'Update User' : params.action === 'view' ? 'View User' : 'Add User'" width="md" (close_modal_clicked)="form.reset()">
     <form [formGroup]="form">
         <div class="py-2 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4">
             <app-text-input [is_required]="true" class="w-full" [label]="'First Name'" formControlName="first_name"></app-text-input>
@@ -70,7 +70,7 @@
         </div>
         <div class="flex justify-end items-center gap-2 mt-2">
             <app-button color="border-primary text-primary" label="Cancel" type="button" (click)="form_modal?.close();form.reset()"></app-button>
-            <app-button color="bg-blue-500 text-black" [label]="params.action === 'edit' ? 'Update' : 'Add'" type="button" (click)="submit()"></app-button>
+            <app-button *ngIf="params.action != 'view'" color="bg-blue-500 text-black" [label]="params.action === 'edit' ? 'Update' : 'Add'" type="button" (click)="submit()"></app-button>
         </div>
     </form>
 </app-model>

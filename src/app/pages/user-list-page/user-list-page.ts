@@ -46,17 +46,21 @@ export class UserListPage {
     });
   }
 
-
   async ngOnInit() {
     this.subscriptions.query_params_subcription = this.ar.queryParams.subscribe(async params => {
-      this.params = { ...params };
-      if (this.params.action == 'edit' && this.params.id) {
+      this.params = { ...params }
+      if (this.params.action === 'edit' && this.params.id) {
         await this.get_item(this.params.id);
-        console.log(this.params.id, " ngOnInit edit");
-
+        this.form.enable();
         this.form_modal?.open();
       }
-
+      if (this.params.action === 'view' && this.params.id) {
+        await this.get_item(this.params.id);
+        this.form.disable();
+        this.form_modal?.open();
+      } else {
+        this.form.enable();
+      }
       await this.get_list(this.params);
     });
   }
@@ -69,10 +73,18 @@ export class UserListPage {
     }
   }
 
-
   open_edit_model(data: any, index: any) {
     this.selected_data = data;
     this.router.navigate([], { queryParams: { action: 'edit', id: this.selected_data.id } });
+  }
+
+  open_view_model(data: any, index: any) {
+    this.selected_data = data;
+    this.router.navigate([], { queryParams: { action: 'view', id: this.selected_data.id } });
+  }
+  open_delete_model(data: any, index: any) {
+    this.selected_data = data;
+    this.delete?.open();
   }
 
   async submit() {
@@ -84,21 +96,17 @@ export class UserListPage {
           this.form_modal?.close();
           this.form.reset()
           this.toastr.success(response.message || 'User added successfully');
-          console.log('User updated successfully', response);
         } else {
-          console.log('Successfully added user', this.form.value);
           response = await this.us.add(this.form.value);
           this.form_modal?.close();
           this.form.reset()
           this.toastr.success(response.message || 'User added successfully');
-          console.log('Successfully added user', response);
         }
         await this.get_list(this.params);
       } else {
         this.form.markAllAsTouched();
       }
     } catch (error: any) {
-      console.error(error);
       this.toastr.error(error?.error?.message || 'Error ');
     }
   }
@@ -106,27 +114,21 @@ export class UserListPage {
   async bulk_upload(body: any) {
     try {
       body = body.map((entry: any) => this.fs.normalizeBulkEntry(entry));
-      // return
       let response = await this.us.bulk_add({ data: body });
       this.toastr.success(response.message || 'Bulk upload successful');
       await this.get_list(this.params);
       this.bulk_modal?.close();
-
     } catch (error: any) {
-      console.error(error?.error?.message, '');
       this.toastr.error(error?.error?.message || 'Error ');
     }
-
   }
 
   async get_item(id: any) {
     try {
-      console.log(id, " get_item");
       let data = await this.us.get(id)
-      console.log(data, " get_item");
       this.form.patchValue(data?.data)
     } catch (error: any) {
-      console.error("Error fetching item:", error);
+      this.toastr.error(error?.error?.message || 'Error ');
     }
   }
 
@@ -135,7 +137,7 @@ export class UserListPage {
       let response = await this.us.get_list(filters);
       this.list = response;
     } catch (error: any) {
-      console.error(error);
+      this.toastr.error(error?.error?.message || 'Error ');
     }
   }
 
@@ -151,14 +153,11 @@ export class UserListPage {
       await this.get_list(this.params);
       this.delete?.close();
     } catch (error: any) {
-      console.error(error);
       this.toastr.error(error?.error?.message || 'Error ');
     }
-
   }
 
   change_params() {
-
     this.router.navigate([], { queryParams: this.params });
   }
 }
