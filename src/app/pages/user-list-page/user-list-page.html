@@ -1,39 +1,62 @@
-<div class="mx-auto mt-10 bg-white shadow-lg rounded-lg p-6">
-    <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold text-blue-600">User List </h1>
-        <app-button (click)="form_modal?.open()" color="bg-blue-500 text-white" [label]="'Add User'" icon="bx  bx-plus" type="button"></app-button>
+<div class="mx-auto md:mt-10 bg-white shadow-lg rounded-lg p-6 bg-gray-100">
+    <div class="flex flex-col md:flex-row justify-between gap-4 md:items-center mb-4">
+        <div class="flex flex-col md:flex-row  gap-4">
+            <h1 class="text-2xl font-bold text-blue-600">User List </h1>
+            <app-search-text-input #searchInput class="w-full md:w-auto" [(ngModel)]="params.search" (debounce)="params.page=1;change_params()" placeholder="Search Name"></app-search-text-input>
+        </div>
+        <div class="relative dropdown z-20">
+            <app-button tabindex="0" role="button" label="Add User" color="bg-blue-500 text-white text-nowrap" icon="bx  bx-plus" size="lg" (click)="add_dropdown.classList.toggle('hidden')"></app-button>
+            <ul #add_dropdown class="dropdown-content absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg hidden">
+                <li>
+                    <p class="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="form_modal.open(); add_dropdown.classList.add('hidden')">Add User</p>
+                </li>
+                <li>
+                    <p class="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="bulk_modal.open(); add_dropdown.classList.add('hidden')"> Add Bulk Users</p>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-200">
-            <thead class="bg-blue-600 text-white">
-                <tr>
-                    <th class="px-4 py-2 text-left">Sr. No</th>  
-                    <th class="px-4 py-2 text-left">Name</th>
-                    <th class="px-4 py-2 text-left">Email</th>
-                    <th class="px-4 py-2 text-left">Role</th>
-                    <th class="px-4 py-2 text-center">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of user_list; let i = index" class="border-b hover:bg-gray-100">
-                    <td class="px-4 py-2">{{ i + 1 }}</td>
-                    <td class="px-4 py-2">{{ item.first_name }} {{ item.last_name }}</td>
-                    <td class="px-4 py-2">{{ item.email }}</td>
-                    <td class="px-4 py-2 font-medium text-blue-600">{{ item.role }}</td>
-                    <td class="px-4 py-2 flex justify-center gap-2">
-                        <app-button (click)="form_modal?.open(); open_edit_model(item)" label="Edit" color="bg-yellow-500 text-white"></app-button>
-                        <app-button (click)="delete?.open()" label="Delete" color="bg-red-500 text-white"></app-button>
-                    </td>
-                </tr>
-                <tr *ngIf="user_list.length === 0">
-                    <td class="flex flex-col items-center justify-center h-[calc(100%-150px)]">
-                        <img src="no_record.png" class="w-64 h-64 object-contain" alt="No Records" />
-                        <p class="text-md text-center mt-2">No records found</p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="overflow-x-auto relative print-section flex flex-col gap-5 mb-4 h-[calc(100%-360px)] md:h-[calc(100%-150px)] border border-[#3F41D1] rounded-md overflow-y-auto bg-white">
+        <div class="overflow-y-auto h-full">
+            <table class="table-auto text-text-color-600 w-full border-collapse  ">
+                <thead class="sticky top-[0px] z-10 lg:z-[15] bg-white text-sm font-medium text-[#3F41D1] border-b border-[#CFD5F1] tracking-wider">
+                    <tr>
+                        <th class="px-4 py-2 text-left">Sr. No</th>
+                        <th class="px-4 py-2 text-left cursor-pointer select-none">
+                            <div class="flex items-center gap-2">
+                                <span>Name</span>
+                                <i (click)="params.order='ASC';params.page=1;params.page_size=50 ;change_params()" class='bx bx-sort-a-z'></i>
+                                <i (click)="params.order='DESC';params.page=1;params.page_size=50 ;change_params()" class='bx bx-sort-z-a'></i>
+                            </div>
+                        </th>
+                        <th class="px-4 py-2 text-left">Email</th>
+                        <th class="px-4 py-2 text-left">Contact</th>
+                        <th class="px-4 py-2 text-left">Role</th>
+                        <th class="px-4 py-2 text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="list?.data?.length > 0" class="text-sm font-normal text-[#1E1E1E] tracking-[0.32px] ">
+                    <tr *ngFor="let item of list?.data; let i = index" class="border-b hover:bg-gray-100">
+                        <td class="px-4 py-2">{{ i + 1 }}</td>
+                        <td class="px-4 py-2 capitalize">{{ item.first_name }} {{ item.last_name }}</td>
+                        <td class="px-4 py-2">{{ item.email }}</td>
+                        <td class="px-4 py-2">{{ item.contact }}</td>
+                        <td class="px-4 py-2 font-medium text-blue-600 capitalize">{{ item.role }}</td>
+                        <td class="px-4 py-2 flex justify-center gap-2">
+                            <app-button (click)="form_modal?.open(); open_edit_model(item, i)" label="Edit" color="bg-yellow-500 text-white"></app-button>
+                            <app-button (click)="delete?.open();selected_data=item" label="Delete" color="bg-red-500 text-white"></app-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div *ngIf="list?.data?.length == 0" class="flex flex-col items-center justify-center h-[calc(100%-150px)]">
+                  <img src="no_record.png" class="w-64 h-64 object-contain" alt="No Records" />
+                <!-- <p class="text-md text-center mt-2">No records found</p> -->
+            </div>
+        </div>
     </div>
+    <br>
+    <app-pagination [currentPage]="params.page" [totalItems]="list?.count || 0" [itemsPerPage]="params.page_size" (onPageChange)="handlePageChange($event)"></app-pagination>
 </div>
 
 <app-model #form_modal [title]="params.action === 'edit' ? 'Update User' : 'Add User'" width="md" (close_modal_clicked)="form.reset()">
@@ -53,5 +76,9 @@
 </app-model>
 
 <app-confirmation-popup #delete confirmation_message="Are you sure you want to Delete this User" popup_title="Delete User">
-    <app-button class="relative" (click)="delete_confirm(params.id)" label="Delete" color="bg-[#3F41D1] text-white"></app-button>
+    <app-button class="relative" (click)="delete_confirm()" label="Delete" color="bg-[#3F41D1] text-white"></app-button>
 </app-confirmation-popup>
+
+<app-model #bulk_modal title="Bulk Upload Users">
+    <app-bulk-upload [button_title]="'Users Bulk'" [title]="'Bulk Users'" [cancel]="bulk_modal" [accepted_type]="['csv', 'xls', 'xlsx']" [max_file_sizeMB]="5" [bulk_columns]="bulk_columns" [can_have_empty_columns]="false" (submit)="bulk_upload($event.data)"></app-bulk-upload>
+</app-model>

@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'ngx-toastr/toastr';
+
 * {
     margin: 0;
     padding: 0;
@@ -37,4 +39,32 @@ body {
 
 .bg-red {
     background-color: #E598AC;
+}
+
+.toast-success {
+    background-color: #53cc16 !important;
+    color: #fff !important;
+}
+
+.toast-error {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+}
+
+.toast-warning {
+    background-color: #ffc107 !important;
+    color: #fff !important;
+}
+
+.toast-info {
+    background-color: #17a2b8 !important;
+    color: #fff !important;
+}
+
+.toast-progress {
+    background-color: #fff !important;
+}
+
+#toast-container>div {
+    border-radius: 8px !important;
 }

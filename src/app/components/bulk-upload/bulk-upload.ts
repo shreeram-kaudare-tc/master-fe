@@ -9,7 +9,7 @@ import { GetDropdownListService } from '../../services/get-dropdown-list.service
 
 @Component({
   selector: 'app-bulk-upload',
-  imports: [NgIf, NgFor, ButtonComponent, KeyValueWithOrderPipe, GetDropdownListService, NgClass],
+  imports: [NgIf, NgFor, ButtonComponent, KeyValueWithOrderPipe, NgClass],
   templateUrl: './bulk-upload.html',
 })
 

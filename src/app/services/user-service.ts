@@ -19,6 +19,17 @@ export class UserService {
     }
   }
 
+
+  async bulk_add(value: any) {
+    try {
+      delete value.id;
+      let response = await this.hs.post('/user/add-bulk-user', {}, value)
+      return response;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
   async delete(id: number) {
     try {
       let response = await this.hs.delete('/user/delete-user?id=' + id, {})
@@ -32,7 +43,7 @@ export class UserService {
 
   async get(id: any) {
     try {
-      let response = await this.hs.get('/user/get-user?email_id=' + id, {})
+      let response = await this.hs.get('/user/get-user?id=' + id, {})
       return response;
     } catch (error: any) {
       throw error;

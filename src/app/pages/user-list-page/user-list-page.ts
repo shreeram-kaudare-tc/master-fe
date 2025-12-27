@@ -2,52 +2,47 @@ import { Component, ViewChild } from '@angular/core';
 import { ModelComponent } from '../../components/modal/modal.component';
 import { TextInputComponent } from '../../components/text-input/text-input.component';
 import { ButtonComponent } from '../../components/button/button.component';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 import { UserService } from '../../services/user-service';
 import { ConfirmationPopupComponent } from '../../components/confirmation-popup/confirmation-popup.component';
+import { PaginationComponent } from '../../components/pagination/pagination.component';
+import { SearchTextInputComponent } from '../../components/search-text-input/search-text-input.component';
+import { BulkUpload } from '../../components/bulk-upload/bulk-upload';
+import { FormService } from '../../services/form.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-list-page',
-  imports: [ModelComponent, TextInputComponent, ButtonComponent, ReactiveFormsModule, NgIf, NgFor, ConfirmationPopupComponent],
+  imports: [ModelComponent, TextInputComponent, ButtonComponent, ReactiveFormsModule, NgIf, NgFor, ConfirmationPopupComponent, PaginationComponent, SearchTextInputComponent, FormsModule, BulkUpload],
   templateUrl: './user-list-page.html',
 })
 export class UserListPage {
   @ViewChild('form_modal') form_modal: any
   @ViewChild('delete') delete: any
+  @ViewChild('bulk_modal') bulk_modal: any
   form: FormGroup;
-  user_list: any = [
-    {
-      id: 1,
-      first_name: 'Rahul',
-      last_name: 'Patil',
-      email: 'rahul@gmail.com',
-      contact: '9876543210',
-      role: 'Admin'
-    },
-    {
-      id: 1,
-      first_name: 'jay',
-      last_name: 'Patil',
-      email: 'jay@gmail.com',
-      contact: '9877548210',
-      role: 'Admin'
-    },
-
-  ];
+  list: any = [];
   params: any = {};
   subscriptions: any = {};
   selected_data: any = {};
 
+  bulk_columns = [
+    { column_name: 'First Name', type: 'text', return_as: 'first_name', sample_value: 'Shreeram' },
+    { column_name: 'Last Name', type: 'text', return_as: 'last_name', sample_value: 'Sharma' },
+    { column_name: 'email', type: 'text', return_as: 'email', sample_value: 'shreeram.sharma@example.com' },
+    { column_name: 'contact', type: 'text', return_as: 'contact', sample_value: '9876543210' },
+    { column_name: 'role', type: 'text', return_as: 'role', sample_value: 'Admin' },
+  ];
 
-  constructor(public route: Router, public fb: FormBuilder, public us: UserService, public ar: ActivatedRoute) {
+  constructor(public router: Router, public fb: FormBuilder, public us: UserService, public ar: ActivatedRoute, public fs: FormService, public toastr: ToastrService) {
     this.form = this.fb.group({
-      role: ['', [Validators.required]],
-      first_name: ['', [Validators.required]],
-      last_name: ['', [Validators.required]],
-      email: ['', [Validators.required]],
-      contact: ['', [Validators.required]],
+      role: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      first_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      last_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+      email: ['', [Validators.required, Validators.pattern(/^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/)]],
+      contact: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(10), Validators.pattern('^[2-9][0-9]{9}$')]],
     });
   }
 
@@ -55,17 +50,18 @@ export class UserListPage {
   async ngOnInit() {
     this.subscriptions.query_params_subcription = this.ar.queryParams.subscribe(async params => {
       this.params = { ...params };
-      await this.get_list(this.params);
-      if (this.params.action == 'edit' && this.params['id']) {
-        // await this.get(this.params['id']);
-        this.form.patchValue(this.selected_data);
+      if (this.params.action == 'edit' && this.params.id) {
+        await this.get_item(this.params.id);
+        console.log(this.params.id, " ngOnInit edit");
+
         this.form_modal?.open();
       }
+
+      await this.get_list(this.params);
     });
   }
 
   async ngOnDestroy() {
-
     for (const key in this.subscriptions) {
       if (this.subscriptions.hasOwnProperty(key)) {
         this.subscriptions[key].unsubscribe();
@@ -73,61 +69,96 @@ export class UserListPage {
     }
   }
 
-  open_edit_model(data: any) {
-    this.selected_data = data;
-    this.route.navigate([], { relativeTo: this.ar, queryParams: { id: this.selected_data.id, action: 'edit' }, queryParamsHandling: 'merge' });
-    this.form_modal?.open();
-    this.form.patchValue(this.selected_data);
-  }
 
+  open_edit_model(data: any, index: any) {
+    this.selected_data = data;
+    this.router.navigate([], { queryParams: { action: 'edit', id: this.selected_data.id } });
+  }
 
   async submit() {
     try {
       if (this.form.valid) {
         let response
         if (this.params.id) {
+          response = await this.us.update(this.params.id, this.form.value);
           this.form_modal?.close();
-          response = await this.us.update(this.form.value.id, this.form.value);
           this.form.reset()
+          this.toastr.success(response.message || 'User added successfully');
           console.log('User updated successfully', response);
         } else {
-          this.form_modal?.close();
+          console.log('Successfully added user', this.form.value);
           response = await this.us.add(this.form.value);
+          this.form_modal?.close();
           this.form.reset()
+          this.toastr.success(response.message || 'User added successfully');
           console.log('Successfully added user', response);
         }
+        await this.get_list(this.params);
+      } else {
+        this.form.markAllAsTouched();
       }
     } catch (error: any) {
       console.error(error);
+      this.toastr.error(error?.error?.message || 'Error ');
     }
   }
 
-  async get(id: any) {
+  async bulk_upload(body: any) {
     try {
-      // let response = await this.us.get(id);
-      // this.selected_data = response;
+      body = body.map((entry: any) => this.fs.normalizeBulkEntry(entry));
+      // return
+      let response = await this.us.bulk_add({ data: body });
+      this.toastr.success(response.message || 'Bulk upload successful');
+      await this.get_list(this.params);
+      this.bulk_modal?.close();
+
     } catch (error: any) {
-      console.error(error);
+      console.error(error?.error?.message, '');
+      this.toastr.error(error?.error?.message || 'Error ');
+    }
+
+  }
+
+  async get_item(id: any) {
+    try {
+      console.log(id, " get_item");
+      let data = await this.us.get(id)
+      console.log(data, " get_item");
+      this.form.patchValue(data?.data)
+    } catch (error: any) {
+      console.error("Error fetching item:", error);
     }
   }
 
   async get_list(filters: any) {
     try {
       let response = await this.us.get_list(filters);
-      this.user_list = response;
+      this.list = response;
     } catch (error: any) {
       console.error(error);
     }
   }
 
-  async delete_confirm(id: number) {
+  async handlePageChange(page: number) {
+    this.params.page = page;
+  }
+
+  async delete_confirm() {
     try {
-      this.delete?.close();
-      let response = await this.us.delete(id);
+      this.list = this.list?.data?.filter((x: any) => x.id !== this.selected_data.id);
+      let data = await this.us.delete(this.selected_data.id);
+      this.toastr.success(data.message || 'User deleted successfully');
       await this.get_list(this.params);
+      this.delete?.close();
     } catch (error: any) {
       console.error(error);
+      this.toastr.error(error?.error?.message || 'Error ');
     }
 
+  }
+
+  change_params() {
+
+    this.router.navigate([], { queryParams: this.params });
   }
 }
