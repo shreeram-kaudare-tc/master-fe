@@ -1,0 +1,60 @@
+<div class="flex flex-col gap-4 p-2">
+    <div *ngIf="file_upload_mode" class="w-full flex-col justify-center">
+        <div *ngIf="file_upload_mode" class="flex justify-between items-center w-full">
+            <p class="text-[16px] flex items-center gap-1">Upload File</p>
+            <button class="border border-[#3F41D1] text-[#3F41D1] font-medium cursor-pointer rounded-full text-sm px-6 h-10 text-center hover:shadow-md focus:shadow-lg" (click)="download_template()">Download Template</button>
+        </div>
+        <p class="text-[13px] font-normal text-gray-700">Upload a CSV or excel file with appropriate data. Download the template to see the required format.</p>
+    </div>
+
+    <div *ngIf="file_upload_mode" class="w-full flex justify-center">
+        <label for="fileInput" class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer transition-all duration-200 ease-in-out" [ngClass]="{'border-blue-500 bg-blue-50 scale-[1.01] shadow-md': is_dragging && !is_uploading,'border-gray-300 bg-gray-50 hover:bg-gray-100': !is_dragging, 'pointer-events-none opacity-50': error_message || is_uploading }" (dragover)="on_drag_over($event)" (dragleave)="on_drag_leave($event)"
+            (drop)="on_drop($event)">
+            <div *ngIf="is_dragging" class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-blue-50/80 backdrop-blur-sm rounded-lg pointer-events-none">
+                <svg class="w-10 h-10 text-blue-500 mb-2" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0l-4 4m4-4l4 4M4 20h16" />
+                </svg>
+                <p class="text-sm font-semibold text-blue-600"> Drop file here</p>
+            </div>
+            <div *ngIf="is_uploading" class="absolute inset-0 z-20 flex items-center justify-center bg-white/70 rounded-lg">
+                <svg class="w-10 h-10 animate-spin text-[#3F41D1]" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+            </div>
+            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg class="w-8 h-8 mb-4 text-[666666]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                </svg>
+                <p class="mb-2 text-sm text-[666666] tracking-wide"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                <p class="text-sm text-[666666]"><span class="uppercase">{{accepted_type}}</span> (MAX. {{ max_file_sizeMB }}MB)</p>
+            </div>
+            <input #fileInput id="fileInput" type="file" class="hidden" [accept]="accepted_type" (change)="on_file_change($event)" />
+        </label>
+    </div>
+
+    <div *ngIf="error_message" class="text-red-600 whitespace-pre-line">{{ error_message }}</div>
+
+    <div *ngIf="!file_upload_mode && enable_preview && display_data.length > 0" class="end-full bg-white border border-primary rounded-lg  overflow-x-auto max-h-[400px] overflow-y-auto">
+        <table class="table-auto text-text-color-600 w-full border-collapse">
+            <thead class="text-sm font-medium text-primary-500 border-b border-[#CFD5F1] tracking-[0.8px]">
+                <tr>
+                    <th *ngFor="let key of display_data[0] | keyValueWithOrder" class="px-2 md:px-4 h-10 md:h-12  text-xs md:text-sm text-center truncate">{{ key.key }}</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm font-normal text-black/87 tracking-[0.32px]">
+                <tr *ngFor="let row of display_data" class="border-b border-[#CFD5F1] truncate">
+                    <td *ngFor="let key of row | keyValueWithOrder" class="px-2 md:px-4 h-10 md:h-12  text-xs md:text-sm text-center truncate">{{ row[key.key] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-center w-full">
+        <button *ngIf="!file_upload_mode || error_message" class="border border-[#3F41D1] text-[#3F41D1] font-medium cursor-pointer rounded-full text-sm px-6 h-10 text-center uppercase hover:shadow-md focus:shadow-lg" (click)="reupload()">Reupload</button>
+        <div class="flex flex-col lg:flex-row  gap-2 "> 
+            <app-button *ngIf="!file_upload_mode && display_data.length > 0" color="bg-white text-[#666666] border border-gray-300" label="Cancel" (click)="cancel.close()"></app-button>
+            <app-button *ngIf="!file_upload_mode && display_data.length > 0" class="relative lg:self-end" [label]=" 'Upload & Import '  + display_data.length + ' ' + button_title" (click)="on_submit()" color="bg-[#3F41D1] text-white "></app-button>
+        </div>
+    </div>
+</div>
