@@ -1,0 +1,6 @@
+<div class="relative flex items-center gap-3">
+    <i class='absolute left-4 bx bx-search text-2xl text-[#3F41D1] text-opacity-60'></i>
+    <input  [(ngModel)]="value" (input)="onInputChange($event)" type="text"
+        class="w-full md:w-[323px] h-10 rounded-full block pl-4 pr-6 ps-12 text-sm font-normal text-[#3F41D1] text-opacity-60 bg-white border border-[#3F41D1] appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+        [placeholder]="placeholder" />
+</div>
