@@ -63,7 +63,8 @@
             <app-text-input [is_required]="true" class="w-full" [label]="'Last Name'" formControlName="last_name"></app-text-input>
             <app-text-input [is_required]="true" class="w-full" [label]="'Email'" formControlName="email"></app-text-input>
             <app-text-input [is_required]="true" class="w-full" [label]="'Contact'" formControlName="contact"></app-text-input>
-            <app-text-input [is_required]="true" class="w-full" [label]="'Role'" formControlName="role"></app-text-input>
+            <!-- <app-text-input [is_required]="true" class="w-full" [label]="'Role'" formControlName="role"></app-text-input> -->
+            <app-select-input [is_required]="true" class="w-full" [label]="'Role'" formControlName="role" [options]="[{title:'Admin',value:'Admin'},{title:'User',value:'User'},{title:'Manager',value:'Manager'}]"></app-select-input>
         </div>
         <div class="flex justify-end items-center gap-2 mt-2">
             <app-button color="border-primary text-primary" label="Cancel" type="button" (click)="form_modal?.close();form.reset()"></app-button>

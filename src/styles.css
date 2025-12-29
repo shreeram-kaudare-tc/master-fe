@@ -73,6 +73,19 @@ body {
 }
 
 /* select */
+
+@layer utilities {
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
 .ng-select .ng-select-container {
     height: 100%;
 }
@@ -112,4 +125,29 @@ body {
 
 .ng-select .ng-select-container {
     height: 100%;
+}
+
+input[type='range'].range-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 15px;
+}
+
+input[type='range'].range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 26px;
+    width: 26px;
+    border-radius: 9999px;
+    background: white;
+    border: 3px solid #3b82f6;
+    cursor: pointer;
+}
+
+input[type='range'].range-slider::-moz-range-thumb {
+    height: 1rem;
+    width: 1rem;
+    border-radius: 9999px;
+    background: white;
+    border: 3px solid #3b82f6;
+    cursor: pointer;
 }

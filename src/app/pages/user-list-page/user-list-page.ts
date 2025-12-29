@@ -12,10 +12,11 @@ import { SearchTextInputComponent } from '../../components/search-text-input/sea
 import { BulkUpload } from '../../components/bulk-upload/bulk-upload';
 import { FormService } from '../../services/form.service';
 import { ToastrService } from 'ngx-toastr';
+import { SelectInputComponent } from '../../components/select-input/select-input.component';
 
 @Component({
   selector: 'app-user-list-page',
-  imports: [ModelComponent, TextInputComponent, ButtonComponent, ReactiveFormsModule, NgIf, NgFor, ConfirmationPopupComponent, PaginationComponent, SearchTextInputComponent, FormsModule, BulkUpload,],
+  imports: [ModelComponent, TextInputComponent, ButtonComponent, ReactiveFormsModule, NgIf, NgFor, ConfirmationPopupComponent, PaginationComponent, SearchTextInputComponent, FormsModule, BulkUpload, SelectInputComponent],
   templateUrl: './user-list-page.html',
 })
 export class UserListPage {
@@ -34,7 +35,7 @@ export class UserListPage {
     { column_name: 'Last Name', type: 'text', return_as: 'last_name', sample_value: 'Sharma', },
     { column_name: 'email', type: 'text', return_as: 'email', sample_value: 'shreeram.sharma@example.com', strict_validation: 'email' },
     { column_name: 'contact', type: 'text', return_as: 'contact', sample_value: '9876543210', strict_validation: 'mobile' },
-    { column_name: 'role', type: 'text', return_as: 'role', sample_value: 'Admin' },
+    { column_name: 'role', type: 'text', return_as: 'role', sample_value: 'Admin', allowed_only: ['Admin', 'User', 'Manager'] },
   ];
 
   constructor(public router: Router, public fb: FormBuilder, public us: UserService, public ar: ActivatedRoute, public fs: FormService, public toastr: ToastrService) {
