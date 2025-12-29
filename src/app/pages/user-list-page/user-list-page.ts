@@ -51,6 +51,7 @@ export class UserListPage {
   async ngOnInit() {
     this.subscriptions.query_params_subcription = this.ar.queryParams.subscribe(async params => {
       this.params = { ...params }
+      await this.get_list(this.params);
       if (this.params.action === 'edit' && this.params.id) {
         await this.get_item(this.params.id);
         this.form.enable();
@@ -63,7 +64,6 @@ export class UserListPage {
       } else {
         this.form.enable();
       }
-      await this.get_list(this.params);
     });
   }
 
@@ -162,6 +162,7 @@ export class UserListPage {
   change_params() {
     this.router.navigate([], { queryParams: this.params });
   }
+  
   togglesort() {
     this.params.page = this.params.page || 1;
     this.params.order = this.params.order === 'asc' ? 'desc' : 'asc';
