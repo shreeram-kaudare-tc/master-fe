@@ -22,13 +22,8 @@
                 <thead class="sticky top-[0px] z-10 lg:z-[15] bg-white text-sm font-medium text-[#3F41D1] border-b border-[#CFD5F1] tracking-wider">
                     <tr>
                         <th class="px-4 py-2 text-left">Sr. No</th>
-                        <th class="px-4 py-2 text-left cursor-pointer select-none">
-                            <div class="flex items-center gap-2">
-                                <span>Name</span>
-                                <i (click)="params.order='ASC';params.page=1;params.page_size=50 ;change_params()" class='bx bx-sort-a-z'></i>
-                                <i (click)="params.order='DESC';params.page=1;params.page_size=50 ;change_params()" class='bx bx-sort-z-a'></i>
-                            </div>
-                        </th>
+                        <th class="px-4 py-2 text-left cursor-pointer" (click)="togglesort()">First Name</th>
+                        <th class="px-4 py-2 text-left cursor-pointer" (click)="togglesort()">Last Name</th>
                         <th class="px-4 py-2 text-left">Email</th>
                         <th class="px-4 py-2 text-left">Contact</th>
                         <th class="px-4 py-2 text-left">Role</th>
@@ -37,8 +32,10 @@
                 </thead>
                 <tbody *ngIf="list?.data?.length > 0" class="text-sm font-normal text-[#1E1E1E] tracking-[0.32px] ">
                     <tr *ngFor="let item of list?.data; let i = index" class="border-b hover:bg-gray-100">
-                        <td class="px-4 py-2">{{ i + 1 }}</td>
-                        <td class="px-4 py-2 capitalize">{{ item.first_name }} {{ item.last_name }}</td>
+                        <td class="px-4 py-2">{{((params.page || 1) - 1) * (params.page_size || 10) + i + 1 }}</td>
+                        <!-- <td class="px-4 py-2">{{ i + 1 }}</td> -->
+                        <td class="px-4 py-2 capitalize">{{ item.first_name }}</td>
+                        <td class="px-4 py-2 capitalize">{{ item.last_name }}</td>
                         <td class="px-4 py-2">{{ item.email }}</td>
                         <td class="px-4 py-2">{{ item.contact }}</td>
                         <td class="px-4 py-2 font-medium text-blue-600 capitalize">{{ item.role }}</td>
@@ -56,7 +53,7 @@
         </div>
     </div>
     <br>
-    <app-pagination [currentPage]="params.page" [totalItems]="list?.count || 0" [itemsPerPage]="params.page_size" (onPageChange)="handlePageChange($event)"></app-pagination>
+    <app-pagination #pagination_page [currentPage]="params.page" [totalItems]="list?.count || 0" [itemsPerPage]="params.page_size" (onPageChange)="handlePageChange($event)"></app-pagination>
 </div>
 
 <app-model #form_modal [title]="params.action === 'edit' ? 'Update User' : params.action === 'view' ? 'View User' : 'Add User'" width="md" (close_modal_clicked)="form.reset()">

@@ -22,6 +22,7 @@ export class UserListPage {
   @ViewChild('form_modal') form_modal: any
   @ViewChild('delete') delete: any
   @ViewChild('bulk_modal') bulk_modal: any
+  @ViewChild('pagination_page') pagination_page: any
   form: FormGroup;
   list: any = [];
   params: any = {};
@@ -159,5 +160,10 @@ export class UserListPage {
 
   change_params() {
     this.router.navigate([], { queryParams: this.params });
+  }
+  togglesort() {
+    this.params.page = this.params.page || 1;
+    this.params.order = this.params.order === 'asc' ? 'desc' : 'asc';
+    this.change_params();
   }
 }
