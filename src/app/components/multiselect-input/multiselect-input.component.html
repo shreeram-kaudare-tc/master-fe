@@ -1,0 +1,27 @@
+<div class="relative cursor-pointer">
+    <!-- {{disabled}} -->
+    <ng-select [disabled]="disabled || is_disabled" [items]="options" bindLabel="title" bindValue="value" [(ngModel)]="selectedValues" [multiple]="is_multiple" [disabled]="disabled" (change)="onSelectionChange($event)" [placeholder]="placeholder" [compareWith]="compareFn"
+        class="block w-full text-sm text-gray-900 h-12 rounded-lg">
+        <ng-template ng-option-tmp let-item="item">
+            <div class="capitalize" title="item.title">{{item.title}}</div>
+        </ng-template>
+    </ng-select>
+
+    <label *ngIf="label" [for]="label" class="absolute truncate max-w-[97%] bg-white text-gray-900 duration-300 floating-label origin-[0] px-2 pointer-events-none text-sm top-[13px] transform transition-all z-10" [ngClass]="{
+            '-translate-y-5 scale-75 text-[rgba(0,0,0,0.6)] left-1': selectedValues?.length != 0, 
+            'left-[4px]': selectedValues?.length == 0
+        }">
+        {{ label }}
+        <span *ngIf="is_required" class="col-span-2 text-red-600">*</span>
+    </label>
+</div>
+<!-- {{value}} -->
+<!-- <div *ngIf="control && control.errors && (control.dirty || control.touched)" class="error-messages ">
+    <p class="text-red-500" *ngIf="control.errors.required">{{label }} is required.</p>
+</div> -->
+<div *ngIf="control && control.errors && (control.dirty || control.touched)" class="error-messages">
+  <p class="text-red-500" *ngIf="control.errors.required">Please select {{ label }}.</p>
+  <p class="text-red-500" *ngIf="control.errors.invalidSchedulingLevel">
+    Scheduling level cannot be greater than number of levels.
+  </p>
+</div>

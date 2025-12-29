@@ -13,10 +13,11 @@ import { BulkUpload } from '../../components/bulk-upload/bulk-upload';
 import { FormService } from '../../services/form.service';
 import { ToastrService } from 'ngx-toastr';
 import { SelectInputComponent } from '../../components/select-input/select-input.component';
+import { MultiselectInputComponent } from '../../components/multiselect-input/multiselect-input.component';
 
 @Component({
   selector: 'app-user-list-page',
-  imports: [ModelComponent, TextInputComponent, ButtonComponent, ReactiveFormsModule, NgIf, NgFor, ConfirmationPopupComponent, PaginationComponent, SearchTextInputComponent, FormsModule, BulkUpload, SelectInputComponent],
+  imports: [ModelComponent, TextInputComponent, ButtonComponent, ReactiveFormsModule, NgIf, NgFor, ConfirmationPopupComponent, PaginationComponent, SearchTextInputComponent, FormsModule, BulkUpload, SelectInputComponent, MultiselectInputComponent],
   templateUrl: './user-list-page.html',
 })
 export class UserListPage {
@@ -24,6 +25,8 @@ export class UserListPage {
   @ViewChild('delete') delete: any
   @ViewChild('bulk_modal') bulk_modal: any
   @ViewChild('pagination_page') pagination_page: any
+  @ViewChild('filter_modal') filter_modal: any
+  @ViewChild('role_value') role_value: any
   form: FormGroup;
   list: any = [];
   params: any = {};
@@ -167,5 +170,37 @@ export class UserListPage {
     this.params.page = this.params.page || 1;
     this.params.order = this.params.order === 'asc' ? 'desc' : 'asc';
     this.change_params();
+  }
+
+  apply_filters() {
+    const params: any = {
+      role: this.params.role || null,
+      page: this.params.page,
+      page_size: this.params.page_size
+    };
+    Object.keys(params).forEach(key => {
+      if (!params[key]) {
+        delete params[key];
+      }
+    });
+    this.filter_modal.close();
+    this.change_params();
+  }
+
+  reset_filters() {
+    delete this.params.role;
+    const params: any = {
+      role: null,
+      page: this.params.page,
+      page_size: this.params.page_size
+    };
+    Object.keys(params).forEach(key => {
+      if (!params[key]) {
+        delete params[key];
+      }
+    });
+    this.filter_modal.close();
+    this.change_params();
+    this.filter_modal?.close();
   }
 }

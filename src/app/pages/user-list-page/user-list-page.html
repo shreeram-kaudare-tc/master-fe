@@ -3,6 +3,7 @@
         <div class="flex flex-col md:flex-row  gap-4">
             <h1 class="text-2xl font-bold text-blue-600">User List </h1>
             <app-search-text-input #searchInput class="w-full md:w-auto" [(ngModel)]="params.search" (debounce)="params.page=1;change_params()" placeholder="Search Name"></app-search-text-input>
+            <app-button (click)="filter_modal?.open(); " label="filter" color="bg-blue-500  text-white" icon="bx bx-filter-alt"></app-button>
         </div>
         <div class="relative dropdown z-20">
             <app-button tabindex="0" role="button" label="Add User" color="bg-blue-500 text-white text-nowrap" icon="bx  bx-plus" size="lg" (click)="add_dropdown.classList.toggle('hidden')"></app-button>
@@ -40,7 +41,7 @@
                         <td class="px-4 py-2">{{ item.contact }}</td>
                         <td class="px-4 py-2 font-medium text-blue-600 capitalize">{{ item.role }}</td>
                         <td class="px-4 py-2 flex justify-center gap-2">
-                            <app-button (click)="form_modal?.open(); open_view_model(item, i)"  label="View" color="bg-green-500 text-white"></app-button>
+                            <app-button (click)="form_modal?.open(); open_view_model(item, i)" label="View" color="bg-green-500 text-white"></app-button>
                             <app-button (click)="form_modal?.open(); open_edit_model(item, i)" label="Edit" color="bg-yellow-500 text-white"></app-button>
                             <app-button (click)="open_delete_model(item, i)" label="Delete" color="bg-red-500 text-white"></app-button>
                         </td>
@@ -79,4 +80,17 @@
 
 <app-model #bulk_modal title="Bulk Upload Users">
     <app-bulk-upload [button_title]="'Users Bulk'" [title]="'Bulk Users'" [cancel]="bulk_modal" [accepted_type]="['csv', 'xls', 'xlsx']" [max_file_sizeMB]="5" [bulk_columns]="bulk_columns" [can_have_empty_columns]="false" (submit)="bulk_upload($event.data)"></app-bulk-upload>
+</app-model>
+
+<app-model #filter_modal [title]="'Filter User'" width="md">
+    <form>
+        <div class="py-2 grid grid-cols-1 gap-4">
+            <app-multiselect-input [is_multiple]="false" [(ngModel)]="params.role" [ngModelOptions]="{standalone: true}" [options]="[{title:'Admin',value:'Admin'},{title:'User',value:'User'},{title:'Manager',value:'Manager'}  ]">
+            </app-multiselect-input>
+        </div>
+        <div class="flex justify-end items-center gap-2 mt-2">
+            <app-button color="border-primary text-primary" label="Clear" type="button" (click)="reset_filters();"></app-button>
+            <app-button color="bg-blue-500 text-black" [label]="'Apply'" type="button" (click)="apply_filters()"></app-button>
+        </div>
+    </form>
 </app-model>
