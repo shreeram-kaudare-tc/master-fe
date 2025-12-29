@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'ngx-toastr/toastr';
+@import "@ng-select/ng-select/themes/default.theme.css";
 
 * {
     margin: 0;
@@ -41,6 +42,8 @@ body {
     background-color: #E598AC;
 }
 
+/* toast */
+
 .toast-success {
     background-color: #53cc16 !important;
     color: #fff !important;
@@ -67,4 +70,46 @@ body {
 
 #toast-container>div {
     border-radius: 8px !important;
+}
+
+/* select */
+.ng-select .ng-select-container {
+    height: 100%;
+}
+
+
+.ng-select.ng-select-single .ng-select-container {
+    height: 48px !important;
+    border-radius: 8px !important;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+    height: 100% !important;
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-input>input {
+    height: 100% !important;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    background: #4B4DD4 !important;
+    padding: 5px !important;
+    color: white !important;
+    border-radius: 8px;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left:hover {
+    background-color: #ebebeb3a;
+}
+
+.ng-select .ng-clear-wrapper .ng-clear {
+    font-size: 20px !important;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+    top: 0px !important
+}
+
+.ng-select .ng-select-container {
+    height: 100%;
 }

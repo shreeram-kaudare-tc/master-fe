@@ -15,7 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-list-page',
-  imports: [ModelComponent, TextInputComponent, ButtonComponent, ReactiveFormsModule, NgIf, NgFor, ConfirmationPopupComponent, PaginationComponent, SearchTextInputComponent, FormsModule, BulkUpload],
+  imports: [ModelComponent, TextInputComponent, ButtonComponent, ReactiveFormsModule, NgIf, NgFor, ConfirmationPopupComponent, PaginationComponent, SearchTextInputComponent, FormsModule, BulkUpload,],
   templateUrl: './user-list-page.html',
 })
 export class UserListPage {
@@ -31,9 +31,9 @@ export class UserListPage {
 
   bulk_columns = [
     { column_name: 'First Name', type: 'text', return_as: 'first_name', sample_value: 'Shreeram' },
-    { column_name: 'Last Name', type: 'text', return_as: 'last_name', sample_value: 'Sharma' },
-    { column_name: 'email', type: 'text', return_as: 'email', sample_value: 'shreeram.sharma@example.com' },
-    { column_name: 'contact', type: 'text', return_as: 'contact', sample_value: '9876543210' },
+    { column_name: 'Last Name', type: 'text', return_as: 'last_name', sample_value: 'Sharma', },
+    { column_name: 'email', type: 'text', return_as: 'email', sample_value: 'shreeram.sharma@example.com', strict_validation: 'email' },
+    { column_name: 'contact', type: 'text', return_as: 'contact', sample_value: '9876543210', strict_validation: 'mobile' },
     { column_name: 'role', type: 'text', return_as: 'role', sample_value: 'Admin' },
   ];
 
