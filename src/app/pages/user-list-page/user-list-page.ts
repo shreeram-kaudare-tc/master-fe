@@ -77,12 +77,12 @@ export class UserListPage {
 
   open_edit_model(data: any, index: any) {
     this.selected_data = data;
-    this.router.navigate([], { queryParams: { action: 'edit', id: this.selected_data.id } });
+    this.router.navigate([], { queryParams: { page: this.params.page, page_size: this.params.page_size, action: 'edit', id: this.selected_data.id, } });
   }
 
   open_view_model(data: any, index: any) {
     this.selected_data = data;
-    this.router.navigate([], { queryParams: { action: 'view', id: this.selected_data.id } });
+    this.router.navigate([], { queryParams: { page: this.params.page, page_size: this.params.page_size, action: 'view', id: this.selected_data.id, } });
   }
   open_delete_model(data: any, index: any) {
     this.selected_data = data;
@@ -162,7 +162,7 @@ export class UserListPage {
   change_params() {
     this.router.navigate([], { queryParams: this.params });
   }
-  
+
   togglesort() {
     this.params.page = this.params.page || 1;
     this.params.order = this.params.order === 'asc' ? 'desc' : 'asc';

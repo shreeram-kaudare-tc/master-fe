@@ -40,7 +40,7 @@
                         <td class="px-4 py-2">{{ item.contact }}</td>
                         <td class="px-4 py-2 font-medium text-blue-600 capitalize">{{ item.role }}</td>
                         <td class="px-4 py-2 flex justify-center gap-2">
-                            <app-button (click)="form_modal?.open(); open_view_model(item, i)" label="View" color="bg-green-500 text-white"></app-button>
+                            <app-button (click)="form_modal?.open(); open_view_model(item, i)"  label="View" color="bg-green-500 text-white"></app-button>
                             <app-button (click)="form_modal?.open(); open_edit_model(item, i)" label="Edit" color="bg-yellow-500 text-white"></app-button>
                             <app-button (click)="open_delete_model(item, i)" label="Delete" color="bg-red-500 text-white"></app-button>
                         </td>
