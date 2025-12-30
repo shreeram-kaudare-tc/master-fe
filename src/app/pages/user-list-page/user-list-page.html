@@ -85,7 +85,7 @@
 <app-model #filter_modal [title]="'Filter User'" width="md">
     <form>
         <div class="py-2 grid grid-cols-1 gap-4">
-            <app-multiselect-input [is_multiple]="false" [(ngModel)]="params.role" [ngModelOptions]="{standalone: true}" [options]="[{title:'Admin',value:'Admin'},{title:'User',value:'User'},{title:'Manager',value:'Manager'}  ]">
+            <app-multiselect-input label="Role" [is_multiple]="false" [(ngModel)]="params.role" [ngModelOptions]="{standalone: true}" [options]="[{title:'Admin',value:'Admin'},{title:'User',value:'User'},{title:'Manager',value:'Manager'}  ]">
             </app-multiselect-input>
         </div>
         <div class="flex justify-end items-center gap-2 mt-2">
