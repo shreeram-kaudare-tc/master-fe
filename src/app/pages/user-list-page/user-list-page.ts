@@ -14,6 +14,7 @@ import { FormService } from '../../services/form.service';
 import { ToastrService } from 'ngx-toastr';
 import { SelectInputComponent } from '../../components/select-input/select-input.component';
 import { MultiselectInputComponent } from '../../components/multiselect-input/multiselect-input.component';
+import { GlobalService } from '../../services/global-service';
 
 @Component({
   selector: 'app-user-list-page',
@@ -26,7 +27,6 @@ export class UserListPage {
   @ViewChild('bulk_modal') bulk_modal: any
   @ViewChild('pagination_page') pagination_page: any
   @ViewChild('filter_modal') filter_modal: any
-  @ViewChild('role_value') role_value: any
   form: FormGroup;
   list: any = [];
   params: any = {};
@@ -41,7 +41,7 @@ export class UserListPage {
     { column_name: 'role', type: 'text', return_as: 'role', sample_value: 'Admin', allowed_only: ['Admin', 'User', 'Manager'] },
   ];
 
-  constructor(public router: Router, public fb: FormBuilder, public us: UserService, public ar: ActivatedRoute, public fs: FormService, public toastr: ToastrService) {
+  constructor(public router: Router, public fb: FormBuilder, public us: UserService, public ar: ActivatedRoute, public fs: FormService, public toastr: ToastrService, public gs: GlobalService) {
     this.form = this.fb.group({
       role: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
       first_name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
@@ -162,45 +162,7 @@ export class UserListPage {
     }
   }
 
-  change_params() {
-    this.router.navigate([], { queryParams: this.params });
-  }
+  
 
-  togglesort() {
-    this.params.page = this.params.page || 1;
-    this.params.order = this.params.order === 'asc' ? 'desc' : 'asc';
-    this.change_params();
-  }
 
-  apply_filters() {
-    const params: any = {
-      role: this.params.role || null,
-      page: this.params.page,
-      page_size: this.params.page_size
-    };
-    Object.keys(params).forEach(key => {
-      if (!params[key]) {
-        delete params[key];
-      }
-    });
-    this.filter_modal.close();
-    this.change_params();
-  }
-
-  reset_filters() {
-    delete this.params.role;
-    const params: any = {
-      role: null,
-      page: this.params.page,
-      page_size: this.params.page_size
-    };
-    Object.keys(params).forEach(key => {
-      if (!params[key]) {
-        delete params[key];
-      }
-    });
-    this.filter_modal.close();
-    this.change_params();
-    this.filter_modal?.close();
-  }
 }

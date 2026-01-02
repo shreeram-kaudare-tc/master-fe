@@ -2,7 +2,7 @@
     <div class="flex flex-col md:flex-row justify-between gap-4 md:items-center mb-4">
         <div class="flex flex-col md:flex-row  gap-4">
             <h1 class="text-2xl font-bold text-blue-600">User List </h1>
-            <app-search-text-input #searchInput class="w-full md:w-auto" [(ngModel)]="params.search" (debounce)="params.page=1;change_params()" placeholder="Search Name"></app-search-text-input>
+            <app-search-text-input #searchInput class="w-full md:w-auto" [(ngModel)]="params.search" (debounce)="params.page=1; gs.change_params(params)" placeholder="Search Name"></app-search-text-input>
             <app-button (click)="filter_modal?.open(); " label="filter" color="bg-blue-500  text-white" icon="bx bx-filter-alt"></app-button>
         </div>
         <div class="relative dropdown z-20">
@@ -23,8 +23,8 @@
                 <thead class="sticky top-[0px] z-10 lg:z-[15] bg-white text-sm font-medium text-[#3F41D1] border-b border-[#CFD5F1] tracking-wider">
                     <tr>
                         <th class="px-4 py-2 text-left">Sr. No</th>
-                        <th class="px-4 py-2 text-left cursor-pointer" (click)="togglesort()">First Name</th>
-                        <th class="px-4 py-2 text-left cursor-pointer" (click)="togglesort()">Last Name</th>
+                        <th class="px-4 py-2 text-left cursor-pointer" (click)="gs.togglesort(params)">First Name</th>
+                        <th class="px-4 py-2 text-left cursor-pointer" (click)="gs.togglesort(params)">Last Name</th>
                         <th class="px-4 py-2 text-left">Email</th>
                         <th class="px-4 py-2 text-left">Contact</th>
                         <th class="px-4 py-2 text-left">Role</th>
@@ -88,8 +88,8 @@
             <app-multiselect-input label="Role" [is_multiple]="false" [(ngModel)]="params.role" [ngModelOptions]="{standalone: true}" [options]="[{title:'Admin',value:'Admin'},{title:'User',value:'User'},{title:'Manager',value:'Manager'}  ]"></app-multiselect-input>
         </div>
         <div class="flex justify-end items-center gap-2 mt-2">
-            <app-button color="border-primary text-primary" label="Clear" type="button" (click)="reset_filters();"></app-button>
-            <app-button color="bg-blue-500 text-black" [label]="'Apply'" type="button" (click)="apply_filters()"></app-button>
+            <app-button color="border-primary text-primary" label="Clear" type="button" (click)="gs.reset_filters(params, ['role'],filter_modal)"></app-button>
+            <app-button color="bg-blue-500 text-black" [label]="'Apply'" type="button" (click)="gs.apply_filters(params,filter_modal)"></app-button>
         </div>
     </form>
 </app-model>
