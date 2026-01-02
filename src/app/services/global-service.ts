@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class GlobalService {
+  
   constructor(public router: Router) { }
 
   apply_filters(params: any, model: any) {
@@ -23,10 +24,8 @@ export class GlobalService {
   togglesort(params: any) {
     params.page = params.page || 1;
     params.order = params.order === 'asc' ? 'desc' : 'asc';
-
     const cleaned_params = this.clean_params(params, null);
     this.change_params(cleaned_params,);
-
     return params;
   }
 
